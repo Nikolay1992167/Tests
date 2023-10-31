@@ -13,5 +13,6 @@ public class Constants {
     public static final String UPDATE_PRODUCT_NAME = "MFU";
     public static final String UPDATE_PRODUCT_DESCRIPTION = "Provides multi-color printing and document scanning.";
     public static final BigDecimal UPDATE_PRODUCT_PRICE = new BigDecimal(7);
+    public static final UUID PRODUCT_INCORRECT_UUID = UUID.fromString("76a4a999-92d7-452f-9a7b-34607ecb6881");
 }
 
