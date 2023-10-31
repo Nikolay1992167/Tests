@@ -87,13 +87,13 @@ class ProductMapperTest {
         }
 
         @Test
-        void shouldReturnInfoProductDtoIfFieldDescriptionProductContainsEmptyString() {
+        void shouldReturnInfoProductDtoIfFieldDescriptionOfProductCorrect() {
             // given
             Product product = ProductTestData.builder()
-                    .withDescription("").build()
-                    .buildProduct();
+                    .withDescription("Good thing!")
+                    .build().buildProduct();
             InfoProductDto expected = InfoProductDtoTestData.builder()
-                    .withName("").build()
+                    .withDescription("Good thing!").build()
                     .buildInfoProductDto();
 
             // when

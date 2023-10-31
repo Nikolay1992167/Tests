@@ -41,7 +41,7 @@ class InMemoryProductRepositoryTest {
         List<Product> result = inMemoryProductRepository.findAll();
 
         // then
-        assertThat(result).isEmpty();
+        assertThat(result).isNotEmpty();
     }
 
     @Test
@@ -66,7 +66,7 @@ class InMemoryProductRepositoryTest {
                 .isNotEmpty()
                 .hasSizeBetween(5, 10);
         assertThat(actual.getDescription())
-                .matches(str -> str == null || str.matches(".{10,30}"));
+                .matches(str -> (str == null || str.matches(".{10,30}")));
         assertThat(actual.getPrice())
                 .isNotNull()
                 .isPositive();

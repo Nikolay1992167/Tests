@@ -153,11 +153,13 @@ class ProductServiceImplTest {
             when(productRepository.save(productToSave))
                     .thenReturn(createdProduct);
 
-            // when, then
+            // when
+            productService.create(productDto);
+
+            // then
+            verify(productRepository).save(productCaptor.capture());
             assertThat(productCaptor.getValue())
-                    .hasFieldOrPropertyWithValue(Product.Fields.uuid, expected);
-            verify(mapper, atLeastOnce()).toProduct(productDto);
-            verify(productRepository, atLeastOnce()).save(productToSave);
+                    .hasFieldOrPropertyWithValue(Product.Fields.uuid, productToSave.getUuid());
         }
 
         @Test
