@@ -83,22 +83,23 @@ class ProductServiceImplTest {
         }
 
         @Test
-        void ShouldReturnProductNotFoundExceptionMessage() {
+        void getShouldReturnExceptionMessageProductNotFound() {
             // given
             Product sourceProduct = ProductTestData.builder()
                     .withUuid(PRODUCT_INCORRECT_UUID)
                     .build()
                     .buildProduct();
             Optional<Product> empty = Optional.empty();
+            String expectedMessage = String.format("Product with uuid: %s not found", sourceProduct.getUuid());
 
             when(productRepository.findById(sourceProduct.getUuid()))
                     .thenReturn(empty);
 
-            // when, then
+            // when
             Exception exception = assertThrows(ProductNotFoundException.class, () -> productService.get(sourceProduct.getUuid()));
-            String expectedMessage = String.format("Product with uuid: %s not found", sourceProduct.getUuid());
             String actualMessage = exception.getMessage();
 
+            // then
             assertTrue(actualMessage.contains(expectedMessage));
             verify(productRepository).findById(sourceProduct.getUuid());
         }
