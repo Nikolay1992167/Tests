@@ -12,16 +12,23 @@ import java.util.UUID;
 
 public class InMemoryProductRepository implements ProductRepository {
 
-    //private final List<Product> products = new CopyOnWriteArrayList<>();
-    List<Product> products = new ArrayList<>(
-            List.of(new Product[]{
-                    new Product(UUID.fromString("76a4a999-92d7-452f-9a7b-34607ecb688e"),
-                            "Printer",
-                            "Multi-colored printing.",
-                            new BigDecimal(5),
-                            LocalDateTime.of(2023, 10, 27, 18, 30, 0))
-            })
-    );
+    private final List<Product> products;
+
+    public InMemoryProductRepository() {
+        this.products = initializeProducts();
+    }
+
+    private List<Product> initializeProducts() {
+        return new ArrayList<>(
+                List.of(new Product[]{
+                        new Product(UUID.fromString("76a4a999-92d7-452f-9a7b-34607ecb688e"),
+                                "Printer",
+                                "Multi-colored printing.",
+                                new BigDecimal(5),
+                                LocalDateTime.of(2023, 10, 27, 18, 30, 0))
+                })
+        );
+    }
 
     @Override
     public Optional<Product> findById(UUID uuid) {
@@ -32,12 +39,14 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public List<Product> findAll() {
-        return products;
+        return new ArrayList<>(products);
     }
 
     @Override
     public Product save(Product product) {
-        product.setUuid(UUID.randomUUID());
+        if (product.getUuid() == null) {
+            product.setUuid(UUID.randomUUID());// пока нет связи с БД, думаю так пусть чекается
+        }
         product.setCreated(LocalDateTime.now());
         products.add(product);
         return product;

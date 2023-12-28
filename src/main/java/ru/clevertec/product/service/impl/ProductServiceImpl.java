@@ -20,15 +20,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public InfoProductDto get(UUID uuid) {
-        Product productToMapper = productRepository.findById(uuid)
-                .orElseThrow(() -> new ProductNotFoundException(uuid));
-        return mapper.toInfoProductDto(productToMapper);
+        return productRepository.findById(uuid)
+                .map(mapper::toInfoProductDto)
+                .orElseThrow(()->new ProductNotFoundException(uuid));
     }
 
     @Override
     public List<InfoProductDto> getAll() {
-        List<Product> products = productRepository.findAll();
-        return products.stream()
+        return productRepository.findAll().stream()
                 .map(mapper::toInfoProductDto)
                 .toList();
     }
@@ -42,13 +41,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(UUID uuid, ProductDto productDto) {
-        productRepository.findById(uuid).ifPresentOrElse(
-                product -> {
-                    Product updatedProduct = mapper.merge(product, productDto);
-                    productRepository.save(updatedProduct);
-                },
-                () -> { throw new ProductNotFoundException(uuid); }
-        );
+        Product updatedProduct = productRepository.findById(uuid)
+                .map(product -> mapper.merge(product, productDto))
+                .orElseThrow(() -> new ProductNotFoundException(uuid));
+        productRepository.save(updatedProduct);
     }
 
     @Override

@@ -2,6 +2,7 @@ package utils;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.clevertec.product.data.InfoProductDto;
 import ru.clevertec.product.data.ProductDto;
 import ru.clevertec.product.entity.Product;
 
@@ -17,12 +18,16 @@ public class ProductTestData {
 
     @Builder.Default
     private UUID uuid = PRODUCT_UUID;
+
     @Builder.Default
     private String name = PRODUCT_NAME;
+
     @Builder.Default
     private String description = PRODUCT_DESCRIPTION;
+
     @Builder.Default
     private BigDecimal price = PRODUCT_PRICE;
+
     @Builder.Default
     private LocalDateTime created = PRODUCT_CREAT_DATE;
 
@@ -32,5 +37,9 @@ public class ProductTestData {
 
     public ProductDto buildProductDto() {
         return new ProductDto(name, description, price);
+    }
+
+    public InfoProductDto buildInfoProductDto() {
+        return new InfoProductDto(uuid, name, description, price);
     }
 }

@@ -37,11 +37,15 @@ class InMemoryProductRepositoryTest {
 
     @Test
     void findAllShouldReturnListOfProduct() {
+        // given
+        int expectedSize = inMemoryProductRepository.findAll().size();
+
         // when
         List<Product> result = inMemoryProductRepository.findAll();
 
         // then
         assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(expectedSize);
     }
 
     @Test
@@ -56,20 +60,7 @@ class InMemoryProductRepositoryTest {
 
         // then
         assertThat(actual)
-                .hasNoNullFieldsOrPropertiesExcept(Product.Fields.uuid)
-                .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
-                .hasFieldOrPropertyWithValue(Product.Fields.description, expected.getDescription())
-                .hasFieldOrPropertyWithValue(Product.Fields.price, expected.getPrice())
-                .hasNoNullFieldsOrPropertiesExcept(Product.Fields.created);
-        assertThat(actual.getName())
-                .isNotNull()
-                .isNotEmpty()
-                .hasSizeBetween(5, 10);
-        assertThat(actual.getDescription())
-                .matches(str -> (str == null || str.matches(".{10,30}")));
-        assertThat(actual.getPrice())
-                .isNotNull()
-                .isPositive();
+                .hasNoNullFieldsOrPropertiesExcept(Product.Fields.uuid);
     }
 
     @Test

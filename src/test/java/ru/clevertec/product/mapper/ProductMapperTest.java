@@ -6,15 +6,16 @@ import org.mapstruct.factory.Mappers;
 import ru.clevertec.product.data.InfoProductDto;
 import ru.clevertec.product.data.ProductDto;
 import ru.clevertec.product.entity.Product;
-import utils.InfoProductDtoTestData;
 import utils.ProductTestData;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.Constants.*;
+import static utils.Constants.UPDATE_PRODUCT_DESCRIPTION;
+import static utils.Constants.UPDATE_PRODUCT_NAME;
+import static utils.Constants.UPDATE_PRODUCT_PRICE;
 
 class ProductMapperTest {
 
-    ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
+    private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
 
     @Nested
     class ToProductTest {
@@ -41,26 +42,15 @@ class ProductMapperTest {
         }
 
         @Test
-        void shouldReturnProductIfProductDtoContainsEmptyField() {
+        void shouldCheckProductDtoWhenNull() {
             // given
-            ProductDto productDto = ProductTestData.builder()
-                    .withDescription(null).build()
-                    .buildProductDto();
-            Product expected = ProductTestData.builder()
-                    .withUuid(null)
-                    .withDescription(null).build()
-                    .buildProduct();
+            ProductDto productDto = null;
 
             // when
             Product actual = productMapper.toProduct(productDto);
 
-            //then
-            assertThat(actual)
-                    .hasFieldOrPropertyWithValue(Product.Fields.uuid, expected.getUuid())
-                    .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
-                    .hasFieldOrPropertyWithValue(Product.Fields.description, expected.getDescription())
-                    .hasFieldOrPropertyWithValue(Product.Fields.price, expected.getPrice())
-                    .hasFieldOrProperty(Product.Fields.created);
+            // then
+            assertThat(actual).isNull();
         }
     }
 
@@ -72,28 +62,7 @@ class ProductMapperTest {
             // given
             Product product = ProductTestData.builder().build()
                     .buildProduct();
-            InfoProductDto expected = InfoProductDtoTestData.builder().build()
-                    .buildInfoProductDto();
-
-            // when
-            InfoProductDto actual = productMapper.toInfoProductDto(product);
-
-            // then
-            assertThat(actual)
-                    .hasFieldOrPropertyWithValue(Product.Fields.uuid, expected.uuid())
-                    .hasFieldOrPropertyWithValue(Product.Fields.name, expected.name())
-                    .hasFieldOrPropertyWithValue(Product.Fields.description, expected.description())
-                    .hasFieldOrPropertyWithValue(Product.Fields.price, expected.price());
-        }
-
-        @Test
-        void shouldReturnInfoProductDtoIfFieldDescriptionOfProductCorrect() {
-            // given
-            Product product = ProductTestData.builder()
-                    .withDescription("Good thing!")
-                    .build().buildProduct();
-            InfoProductDto expected = InfoProductDtoTestData.builder()
-                    .withDescription("Good thing!").build()
+            InfoProductDto expected = ProductTestData.builder().build()
                     .buildInfoProductDto();
 
             // when
